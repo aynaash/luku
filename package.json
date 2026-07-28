@@ -1,0 +1,110 @@
+{
+  "name": "luku",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Drip for your React sites. A composition engine for Tailwind — hierarchy, rhythm and emphasis as components, plus an inspector that audits the rendered page.",
+  "keywords": [
+    "react",
+    "tailwind",
+    "tailwindcss",
+    "nextjs",
+    "design-system",
+    "layout",
+    "composition",
+    "typography",
+    "spacing",
+    "vertical-rhythm",
+    "visual-hierarchy",
+    "accessibility",
+    "primitives"
+  ],
+  "license": "MIT",
+  "author": "aynaash <caynaashow@gmail.com>",
+  "homepage": "https://github.com/aynaash/luku#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aynaash/luku.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aynaash/luku/issues"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./tokens": {
+      "types": "./dist/tokens/index.d.ts",
+      "default": "./dist/tokens/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "default": "./dist/utils/index.js"
+    },
+    "./spacing": {
+      "types": "./dist/spacing/index.d.ts",
+      "default": "./dist/spacing/index.js"
+    },
+    "./layout": {
+      "types": "./dist/layout/index.d.ts",
+      "default": "./dist/layout/index.js"
+    },
+    "./typography": {
+      "types": "./dist/typography/index.d.ts",
+      "default": "./dist/typography/index.js"
+    },
+    "./composition": {
+      "types": "./dist/composition/index.d.ts",
+      "default": "./dist/composition/index.js"
+    },
+    "./patterns": {
+      "types": "./dist/patterns/index.d.ts",
+      "default": "./dist/patterns/index.js"
+    },
+    "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
+      "default": "./dist/hooks/index.js"
+    },
+    "./devtools": {
+      "types": "./dist/devtools/index.d.ts",
+      "default": "./dist/devtools/index.js"
+    },
+    "./theme.css": "./theme.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "theme.css",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "prepublishOnly": "bun run build",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.2.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "^5.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

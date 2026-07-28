@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install
+
+      # The build is the test. tsc in strict mode over every component, then a
+      # check that the two properties the package promises actually hold in the
+      # output: 'use client' survived, and no relative import lost its extension
+      # (either would break silently in a consumer's Next app, not here).
+      - run: npm run build
+
+      - name: Verify client directives survived
+        run: |
+          count=$(grep -rl "^'use client'" dist --include="*.js" | wc -l)
+          echo "client components in dist: $count"
+          test "$count" -ge 19
+
+      - name: Verify ESM specifiers are resolvable
+        run: |
+          bad=$(grep -rhoE "from ['\"]\.[^'\"]*['\"]" dist --include="*.js" | grep -v "\.js['\"]" || true)
+          if [ -n "$bad" ]; then echo "extensionless relative imports:"; echo "$bad"; exit 1; fi
+
+      - name: Verify the published tarball
+        run: npm pack --dry-run

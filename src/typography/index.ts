@@ -1,0 +1,5 @@
+export { Heading, type HeadingProps } from './Heading.js'
+export { Text, type TextOwnProps, type TextSize } from './Text.js'
+export { Eyebrow, type EyebrowProps } from './Eyebrow.js'
+export { Prose, type ProseProps } from './Prose.js'
+export { Quote, type QuoteProps, type QuoteVariant } from './Quote.js'

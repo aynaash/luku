@@ -1,0 +1,61 @@
+/**
+ * luku — default theme variables.
+ *
+ * The components reference six custom properties and nothing else. Import this
+ * file to get working defaults, or skip it entirely and declare the same six in
+ * your own stylesheet — that is the supported way to theme luku.
+ *
+ *   @import "luku/theme.css";
+ *
+ * Every other custom property luku touches (--split-tracks, --sidebar-tracks,
+ * --balance-tracks, --row-cols) is written inline by the component that owns it.
+ * Do not set those yourself.
+ */
+
+:root {
+  /* Page surface and the text that sits on it. */
+  --background: #ffffff;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+
+  /* The one colour that means "act on this". Used by CTA, CardIcon, Eyebrow. */
+  --accent: #e67e22;
+  /* A translucent cast of --accent, for glows and hover washes. */
+  --accent-glow: rgba(230, 126, 34, 0.35);
+  /* Focus ring. Keep it distinguishable from --accent-glow at 2px. */
+  --ring: rgba(230, 126, 34, 0.55);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #12111a;
+    --text-primary: #eae6e5;
+    --text-secondary: #9a98b5;
+    --accent: #e67e22;
+    --accent-glow: rgba(230, 126, 34, 0.4);
+    --ring: rgba(230, 126, 34, 0.4);
+  }
+}
+
+/**
+ * Explicit opt-in overrides, for apps that switch themes with an attribute
+ * rather than the OS setting. These come last so they win over the media query
+ * in both directions — a `[data-theme="light"]` page stays light on a dark OS.
+ */
+:root[data-theme='light'] {
+  --background: #ffffff;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --accent: #e67e22;
+  --accent-glow: rgba(230, 126, 34, 0.35);
+  --ring: rgba(230, 126, 34, 0.55);
+}
+
+:root[data-theme='dark'] {
+  --background: #12111a;
+  --text-primary: #eae6e5;
+  --text-secondary: #9a98b5;
+  --accent: #e67e22;
+  --accent-glow: rgba(230, 126, 34, 0.4);
+  --ring: rgba(230, 126, 34, 0.4);
+}

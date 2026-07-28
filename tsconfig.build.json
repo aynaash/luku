@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+
+    // Per-file ESM emit, not a bundle. Two reasons this build is `tsc` and not
+    // esbuild/tsup: TypeScript preserves the `'use client'` directive prologue
+    // verbatim (bundlers routinely drop or hoist it, which silently turns a
+    // client component into a server one), and one output file per source file
+    // keeps the package tree-shakeable without a bundler in the loop.
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+
+    "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Deliberately narrow: no `bun-types`, no `node`. A published UI package
+    // must type-check against React and the DOM alone — anything else here
+    // would let a Node-only global slip into a browser bundle.
+    "types": ["react"],
+
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}
