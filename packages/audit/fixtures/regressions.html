@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fixture — one case per bug found in the field</title>
+    <style>
+      /*
+        Every block here reproduces a false positive or a blind spot that a real
+        site exposed and fixtures did not. They exist so those bugs cannot come
+        back quietly.
+      */
+      body { margin: 0; font-family: system-ui, sans-serif; background: #f2efe0; color: #1e211a; }
+      section { padding: 32px 24px; max-width: 1120px; margin: 0 auto; }
+
+      /* [1] hersitech.com: logo-as-h1. Empty textContent, real accessible name. */
+      h1 { margin: 0 0 16px; font-size: 40px; }
+      .mark { width: 180px; height: 48px; background: #6f8e5c; display: block; }
+
+      /* [2] hersitech.com: animated underline. A 1px gradient is not a backdrop,
+             and treating it as one reported 5:1 text at 1.52:1. */
+      .wire-link {
+        color: #4d6b3e;
+        text-decoration: none;
+        background-image: linear-gradient(rgb(111, 142, 92), rgb(111, 142, 92));
+        background-size: 0px 1px;
+        background-repeat: no-repeat;
+        background-position: 0 100%;
+      }
+
+      /* [3] tailwindcss.com: modern colour spaces. Chrome serialises these into
+             CIE spaces; a parser that only knows rgb() reads white-on-white. */
+      .modern { background: oklch(0.25 0.03 250); padding: 24px; border-radius: 12px; }
+      .modern p { color: oklch(0.45 0.02 250); margin: 0; font-size: 14px; }
+
+      /* [4] tailwindcss.com: SVG internals are drawing geometry, not layout. */
+      .art { display: block; width: 320px; height: 90px; }
+
+      /* [5] Repeated component — one defect, twelve instances. */
+      .row { display: flex; gap: 8px; margin-top: 24px; }
+      .tile { background: #e6e2d0; padding: 13px; border-radius: 8px; font-size: 12px; color: #b9b3a1; }
+
+      /* [6] A genuinely covering gradient: unknowable, must be admitted, not invented. */
+      .hero { background-image: linear-gradient(135deg, #6f8e5c, #4d6b3e); padding: 40px 24px; border-radius: 12px; margin-top: 24px; }
+      .hero p { color: #8a9a7c; margin: 0; font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <!-- [1] must NOT be reported as an empty heading -->
+        <h1><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Hersi." class="mark" width="180" height="48" /></h1>
+
+        <!-- [2] must NOT be reported at ~1.5:1; real ratio against cream is fine -->
+        <p><a href="#x" class="wire-link">See all projects</a></p>
+
+        <!-- [3] must be measured, not skipped: oklch on oklch -->
+        <div class="modern"><p>Low contrast declared entirely in OKLCH.</p></div>
+
+        <!-- [4] no rule may report on these paths -->
+        <svg class="art" viewBox="0 0 320 90" aria-hidden="true">
+          <g>
+            <path d="M4 80 L60 20 L118 78" fill="none" stroke="#6f8e5c" stroke-width="2" />
+            <path d="M124 80 L180 22 L236 79" fill="none" stroke="#6f8e5c" stroke-width="2" />
+            <path d="M240 80 L296 24 L316 77" fill="none" stroke="#6f8e5c" stroke-width="2" />
+          </g>
+        </svg>
+
+        <!-- [5] twelve tiles, one off-scale padding: one finding, occurrences 12 -->
+        <div class="row">
+          <div class="tile">one</div><div class="tile">two</div><div class="tile">three</div>
+          <div class="tile">four</div><div class="tile">five</div><div class="tile">six</div>
+          <div class="tile">seven</div><div class="tile">eight</div><div class="tile">nine</div>
+          <div class="tile">ten</div><div class="tile">eleven</div><div class="tile">twelve</div>
+        </div>
+
+        <!-- [6] covering gradient: report as info with an admitted unknown -->
+        <div class="hero"><p>Text over a gradient that genuinely covers its box.</p></div>
+      </section>
+    </main>
+  </body>
+</html>

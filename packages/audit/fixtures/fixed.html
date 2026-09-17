@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fixture — the same page, with every reported finding acted on</title>
+    <style>
+      /*
+        Byte-for-byte the same content as messy.html. Only the relationships
+        changed. This is what the other end of an agent loop looks like: the
+        edits are small, mechanical, and each one traces to a finding id.
+      */
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #ffffff;
+        color: #1a1a1a;
+      }
+      section { padding: 64px 24px; }
+      .wrap { max-width: 1120px; margin: 0 auto; }
+
+      /* proximity: inner gap now sits a step below the gap between cards. */
+      .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .card {
+        padding: 16px;
+        border: 1px solid #e5e5e5;
+        border-radius: 12px;
+        background: #fafafa;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-width: 0;           /* overflow: 1fr tracks floor at min-content */
+      }
+
+      /* spacing-scale: 22/13 → steps the page already uses. */
+      .note { margin-top: 24px; padding: 16px; background: #f4f4f5; border-radius: 12px; }
+
+      /* contrast: 2.2:1 → 7.5:1 on white. */
+      .muted { color: #52525b; font-size: 14px; }
+
+      .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+      .btn {
+        border-radius: 999px;
+        padding: 16px 24px;     /* tap-target: 41px tall → 50px tall */
+        font-size: 15px;
+        cursor: pointer;
+        border: 1px solid transparent;
+      }
+      /* competing-emphasis: one filled action, one outlined. */
+      .btn-solid { background: #2563eb; color: #ffffff; border-color: #2563eb; }
+      .btn-outline { background: #ffffff; color: #1d4ed8; border-color: #c7d2fe; }
+      /* focus-visible: the ring is still suppressed — but it is replaced. */
+      .btn:focus { outline: none; }
+      .btn:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+
+      /* heading-attachment: more room above the heading than below it. */
+      .stack p { margin: 0 0 16px; }
+      .stack h3 { margin: 32px 0 12px; font-size: 22px; }
+
+      .chip { display: inline-block; padding: 4px 12px; font-size: 12px; background: #eee; border-radius: 12px; }
+
+      /* overflow: a width the smallest viewport can hold. */
+      .band { width: 100%; height: 80px; background: linear-gradient(90deg, #ddd, #eee); border-radius: 12px; }
+
+      /* measure: capped in ch, so it adapts to the rendered font. */
+      .long { font-size: 16px; line-height: 1.6; max-width: 68ch; }
+
+      h1 { font-size: 44px; line-height: 1.1; margin: 0 0 16px; max-width: 20ch; }
+      h2 { font-size: 30px; margin: 0 0 16px; }
+      h3 { font-size: 19px; margin: 0 0 12px; }   /* heading-order: no skipped level */
+      p { margin: 0 0 16px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <div class="wrap">
+          <h1>A page that looks fine and is not</h1>
+          <p class="long">
+            Every value on this page is reasonable in isolation. The card padding is a
+            round number, the gap is a round number, the grey is a perfectly ordinary
+            grey, and both buttons are buttons. None of it is wrong until you compare
+            one measurement against another, which is the whole reason this check has
+            to run against the rendered page rather than against the source that
+            produced it. A source linter sees a padding token and a gap token and has
+            no opinion, because in the source they are simply two different constants.
+          </p>
+          <div class="actions">
+            <button class="btn btn-solid">Get started</button>
+            <button class="btn btn-outline">Talk to sales</button>
+          </div>
+          <p class="muted">No credit card required.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap">
+          <h2>Features</h2>
+          <div class="grid">
+            <article class="card">
+              <h3>Renders anywhere</h3>
+              <p>Works against a URL or a built HTML file.</p>
+              <span class="chip">new</span>
+            </article>
+            <article class="card">
+              <h3>Reads the page</h3>
+              <p>The spacing scale comes from what you actually shipped.</p>
+            </article>
+            <article class="card">
+              <h3>Deterministic</h3>
+              <p>Same render, same bytes out.</p>
+            </article>
+          </div>
+          <div class="note">
+            <p class="muted">A note whose padding and margin agree with the rest of the page.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap stack">
+          <h2>Things that only exist after layout</h2>
+          <p>An introductory sentence, so the heading below has content on both sides.</p>
+          <h3>A heading bound to what it introduces</h3>
+          <p>Body copy that this heading is supposed to introduce, and now does.</p>
+          <p>
+            A paragraph in a box that grows to fit its copy. Nothing is hidden, so
+            nothing has to be signposted as hidden.
+          </p>
+          <p>A paragraph on the same edge as its siblings.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap">
+          <h2>A band that fits</h2>
+          <div class="band"></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fixture — a plausible page with relational defects</title>
+    <style>
+      /*
+        Deliberately representative of generated UI: every value looks fine on
+        its own. The defects only exist in the relationships between elements,
+        which is exactly the class of bug no source linter can see.
+      */
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #ffffff;
+        color: #1a1a1a;
+      }
+      section { padding: 64px 24px; }
+      .wrap { max-width: 1120px; margin: 0 auto; }
+
+      /* Proximity inversion: cards sit 16px apart but are padded 32px inside. */
+      .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .card {
+        padding: 32px;
+        border: 1px solid #e5e5e5;
+        border-radius: 14px;
+        background: #fafafa;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;              /* inner gap > the 16px separating the cards */
+      }
+
+      /* Off-system strays: the page is otherwise on 8s. */
+      .note { margin-top: 22px; padding: 13px; background: #f4f4f5; border-radius: 9px; }
+
+      /* Contrast: light grey on white reads fine on a good monitor. */
+      .muted { color: #a8a8a8; font-size: 14px; }
+
+      /* Two filled buttons in one decision. */
+      .actions { display: flex; gap: 12px; }
+      .btn {
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 24px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      .btn-solid { background: #2563eb; color: #ffffff; }
+      .btn-also-solid { background: #7c3aed; color: #ffffff; }
+      /* The ring is removed and never replaced — invisible to keyboard users. */
+      .btn:focus { outline: none; }
+
+      /* Heading bound to the section above it instead of the one it introduces. */
+      .stack p { margin: 0 0 8px; }
+      .stack h3 { margin: 8px 0 32px; font-size: 22px; }
+
+      /* A box sized against placeholder copy, meeting real copy. */
+      .clip { height: 24px; overflow: hidden; }
+
+      /* Three pixels: too small to read as intent, too large to read as aligned. */
+      .stack p.offset { margin-left: 3px; }
+
+      /* Under the WCAG 2.2 24px minimum. */
+      .chip { display: inline-block; padding: 2px 6px; font-size: 11px; background: #eee; border-radius: 4px; }
+
+      /* Overflow: a fixed width that a phone cannot hold. */
+      .too-wide { width: 1400px; height: 80px; background: linear-gradient(90deg, #ddd, #eee); border-radius: 6px; }
+
+      /* Unconstrained measure. */
+      .long { font-size: 16px; line-height: 1.6; }
+
+      h1 { font-size: 44px; line-height: 1.1; margin: 0 0 16px; }
+      h2 { font-size: 30px; margin: 0 0 16px; }
+      h4 { font-size: 19px; margin: 0 0 8px; }  /* skips h3 */
+      h5 { font-size: 17px; }
+      p { margin: 0 0 16px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <div class="wrap">
+          <h1>A page that looks fine and is not</h1>
+          <p class="long">
+            Every value on this page is reasonable in isolation. The card padding is a
+            round number, the gap is a round number, the grey is a perfectly ordinary
+            grey, and both buttons are buttons. None of it is wrong until you compare
+            one measurement against another, which is the whole reason this check has
+            to run against the rendered page rather than against the source that
+            produced it. A source linter sees a padding token and a gap token and has
+            no opinion, because in the source they are simply two different constants.
+          </p>
+          <div class="actions">
+            <button class="btn btn-solid">Get started</button>
+            <button class="btn btn-also-solid">Talk to sales</button>
+          </div>
+          <p class="muted">No credit card required.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap">
+          <h2>Features</h2>
+          <div class="grid">
+            <article class="card">
+              <h4>Renders anywhere</h4>
+              <p>Works against a URL or a built HTML file.</p>
+              <span class="chip">new</span>
+            </article>
+            <article class="card">
+              <h4>Reads the page</h4>
+              <p>The spacing scale comes from what you actually shipped.</p>
+            </article>
+            <article class="card">
+              <h5>Deterministic</h5>
+              <p>Same render, same bytes out.</p>
+            </article>
+          </div>
+          <div class="note">
+            <p class="muted">A note with padding and a margin that agree with nothing else here.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap stack">
+          <h2>Things that only exist after layout</h2>
+          <p>An introductory sentence, so the heading below has content on both sides.</p>
+          <h3>A heading that belongs to neither side</h3>
+          <p>Body copy that this heading is supposed to introduce and does not.</p>
+          <p class="clip">
+            A paragraph in a box whose height was chosen while the copy was still
+            three words long. Nothing here indicates that the rest of the sentence
+            exists, which is what makes it worse than an ellipsis would be.
+          </p>
+          <p class="offset">A paragraph three pixels off the edge its siblings share.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap">
+          <h2>A band that does not fit</h2>
+          <div class="too-wide"></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

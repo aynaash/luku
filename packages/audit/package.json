@@ -1,0 +1,59 @@
+{
+  "name": "@luku/audit",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Deterministic composition linter for rendered UI. Framework-agnostic: point it at any URL or HTML file and it audits layout, rhythm, hierarchy and contrast from the rendered DOM.",
+  "keywords": [
+    "design-system",
+    "layout",
+    "linter",
+    "accessibility",
+    "composition",
+    "visual-hierarchy",
+    "ai",
+    "agent",
+    "codegen"
+  ],
+  "license": "MIT",
+  "bin": {
+    "luku-audit": "./dist/cli.js",
+    "luku-audit-mcp": "./dist/mcp.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/core.d.ts",
+      "default": "./dist/core.js"
+    },
+    "./browser": "./dist/core.global.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "typecheck": "tsc --noEmit",
+    "demo": "node dist/cli.js fixtures/messy.html",
+    "prepublishOnly": "npm run build",
+    "test": "node test/run.mjs",
+    "test:live": "node test/run.mjs --live"
+  },
+  "peerDependencies": {
+    "playwright-core": ">=1.40.0"
+  },
+  "peerDependenciesMeta": {
+    "playwright-core": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.24.0",
+    "playwright-core": "^1.49.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
